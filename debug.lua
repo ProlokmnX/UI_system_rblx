@@ -1,7 +1,6 @@
 -- debug.lua
 local MainUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProlokmnX/UI_system_rblx/main/main_ui.lua"))()
 local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProlokmnX/UI_system_rblx/main/ui.lua"))()
-local Notiy = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProlokmnX/UI_system_rblx/main/notiy.lua"))()
 
 -- Create the base UI
 local mainFrame = MainUI.create(
@@ -17,11 +16,7 @@ UI.addTitle(mainFrame, "Debugging UI", 7229442422) -- Image ID provided
 -- Add a close button
 UI.addCloseButton(mainFrame)
 
--- Add buttons for various tests
-UI.addButton(mainFrame, "Test Notification", function()
-    Notiy.create("Notification Test", "This is a debug notification!", 3, Color3.fromRGB(85, 255, 85), 0.1)
-end)
-
+-- Add buttons
 UI.addButton(mainFrame, "Print Debug Info", function()
     print("Debug info: Test button clicked!")
 end)
