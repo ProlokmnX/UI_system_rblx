@@ -1,12 +1,7 @@
 -- ui.lua
 local UI = {}
 
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
--- Add a title to the main UI
+-- Add a title with optional image
 function UI.addTitle(mainFrame, titleText, imageId)
     local titleBar = Instance.new("Frame")
     titleBar.Name = "TitleBar"
@@ -39,7 +34,7 @@ function UI.addTitle(mainFrame, titleText, imageId)
     titleLabel.Parent = titleBar
 end
 
--- Add a button to the main UI
+-- Add a button
 function UI.addButton(mainFrame, buttonText, buttonCallback)
     local button = Instance.new("TextButton")
     button.Text = buttonText or "Button"
@@ -62,7 +57,7 @@ function UI.addButton(mainFrame, buttonText, buttonCallback)
     end)
 end
 
--- Add a close button to the main UI
+-- Add a close button
 function UI.addCloseButton(mainFrame)
     local closeButton = Instance.new("TextButton")
     closeButton.Text = "X"
