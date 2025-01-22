@@ -1,74 +1,78 @@
--- notiy.lua
-local Notiy = {}
+local Notify = {}
 
-local TweenService = game:GetService("TweenService")
+-- Function to create notifications
+function Notify.create(title, message, duration, color, transparency, iconId, soundId)
+    local player = game.Players.LocalPlayer
+    local playerGui = player:FindFirstChild("PlayerGui")
 
-local notifications = {}
-local container
-
-local function createNotification(title, text, duration, color, transparency)
-    if not container then
-        container = Instance.new("ScreenGui")
-        container.Name = "NotiyContainer"
-        container.IgnoreGuiInset = true
-        container.ResetOnSpawn = false
-        container.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    end
+    -- Create a ScreenGui for notifications
+    local screenGui = playerGui:FindFirstChild("Notifications") or Instance.new("ScreenGui")
+    screenGui.Name = "Notifications"
+    screenGui.Parent = playerGui
+    screenGui.ResetOnSpawn = false
 
     -- Create the notification frame
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 300, 0, 70)
-    frame.Position = UDim2.new(1, -320, 1, -(#notifications * 80 + 80))
-    frame.BackgroundTransparency = transparency or 0.1
-    frame.BackgroundColor3 = color or Color3.new(0.1, 0.1, 0.1)
-    frame.BorderSizePixel = 0
-    frame.AnchorPoint = Vector2.new(1, 1)
-    frame.Parent = container
-    frame.ClipsDescendants = true
-    frame.Visible = false
+    local notificationFrame = Instance.new("Frame")
+    notificationFrame.Size = UDim2.new(0, 300, 0, 80)
+    notificationFrame.Position = UDim2.new(1, -310, 1, -90 - (#screenGui:GetChildren() * 90))
+    notificationFrame.BackgroundColor3 = color or Color3.fromRGB(30, 30, 30)
+    notificationFrame.BackgroundTransparency = transparency or 0.2
+    notificationFrame.Parent = screenGui
 
-    local corner = Instance.new("UICorner", frame)
+    local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = notificationFrame
 
-    -- Title
-    local titleLabel = Instance.new("TextLabel", frame)
-    titleLabel.Size = UDim2.new(1, -20, 0, 30)
-    titleLabel.Position = UDim2.new(0, 10, 0, 5)
+    -- Add the title
+    local titleLabel = Instance.new("TextLabel")
     titleLabel.Text = title or "Notification"
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.TextSize = 16
-    titleLabel.TextColor3 = Color3.new(1, 1, 1)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.BackgroundTransparency = 1
+    titleLabel.Size = UDim2.new(1, -10, 0, 30)
+    titleLabel.Position = UDim2.new(0, 10, 0, 5)
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Parent = notificationFrame
 
-    -- Text
-    local textLabel = Instance.new("TextLabel", frame)
-    textLabel.Size = UDim2.new(1, -20, 0, 25)
-    textLabel.Position = UDim2.new(0, 10, 0, 40)
-    textLabel.Text = text or "This is a notification."
-    textLabel.Font = Enum.Font.Gotham
-    textLabel.TextSize = 14
-    textLabel.TextColor3 = Color3.new(0.9, 0.9, 0.9)
-    textLabel.BackgroundTransparency = 1
-    textLabel.TextWrapped = true
+    -- Add the message
+    local messageLabel = Instance.new("TextLabel")
+    messageLabel.Text = message or "Message goes here."
+    messageLabel.Font = Enum.Font.Gotham
+    messageLabel.TextSize = 14
+    messageLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    messageLabel.BackgroundTransparency = 1
+    messageLabel.Size = UDim2.new(1, -10, 0, 30)
+    messageLabel.Position = UDim2.new(0, 10, 0, 40)
+    messageLabel.TextXAlignment = Enum.TextXAlignment.Left
+    messageLabel.Parent = notificationFrame
 
-    -- Show animation
-    TweenService:Create(frame, TweenInfo.new(0.5), {Visible = true}):Play()
+    -- Add an optional icon
+    if iconId then
+        local icon = Instance.new("ImageLabel")
+        icon.Image = "rbxassetid://" .. tostring(iconId)
+        icon.Size = UDim2.new(0, 40, 0, 40)
+        icon.Position = UDim2.new(0, 5, 0, 20)
+        icon.BackgroundTransparency = 1
+        icon.Parent = notificationFrame
 
-    -- Add to stack
-    table.insert(notifications, frame)
+        titleLabel.Position = UDim2.new(0, 50, 0, 5)
+        messageLabel.Position = UDim2.new(0, 50, 0, 40)
+    end
 
-    -- Auto-remove
-    task.spawn(function()
-        wait(duration or 5)
-        TweenService:Create(frame, TweenInfo.new(0.5), {Position = UDim2.new(1, 0, 1, frame.Position.Y.Offset)}):Play()
-        wait(0.5)
-        frame:Destroy()
-        table.remove(notifications, table.find(notifications, frame))
+    -- Play optional sound
+    if soundId then
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://" .. tostring(soundId)
+        sound.Volume = 0.5
+        sound.Parent = notificationFrame
+        sound:Play()
+    end
+
+    -- Auto-destroy the notification
+    task.delay(duration or 5, function()
+        notificationFrame:Destroy()
     end)
 end
 
-function Notiy.create(title, text, duration, color, transparency)
-    createNotification(title, text, duration, color, transparency)
-end
-
-return Notiy
+return Notify
