@@ -1,19 +1,24 @@
 local UI = {}
 
 function UI.create(title, iconId, size, bgColor, transparency)
+    -- Validate the size argument
+    size = size or UDim2.new(0, 400, 0, 300) -- Default size if none is provided
+    -- Validate transparency argument
+    transparency = transparency or 0.1 -- Default transparency if none is provided
+
+    -- Validate background color argument
+    bgColor = bgColor or Color3.fromRGB(30, 30, 30) -- Default background color if none is provided
+    
     local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     local screenGui = Instance.new("ScreenGui")
     screenGui.Parent = playerGui
-
-    -- Ensure size is provided, or use a default value
-    size = size or UDim2.new(0, 400, 0, 300)
 
     -- Main Frame
     local frame = Instance.new("Frame")
     frame.Size = size
     frame.Position = UDim2.new(0.5, -size.X.Offset / 2, 0.5, -size.Y.Offset / 2) -- Centered
-    frame.BackgroundColor3 = bgColor or Color3.fromRGB(30, 30, 30)
-    frame.BackgroundTransparency = transparency or 0.1
+    frame.BackgroundColor3 = bgColor
+    frame.BackgroundTransparency = transparency
     frame.AnchorPoint = Vector2.new(0.5, 0.5)
     frame.Parent = screenGui
 
