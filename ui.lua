@@ -40,7 +40,7 @@ function UI.create(parent, title, titleColor, bgColor, transparency, iconId)
         titleBar.Text = "   " .. titleBar.Text -- Offset text for icon
     end
 
-    -- Draggable
+    -- Draggable UI
     local dragging = false
     local dragStart, startPos
 
@@ -55,7 +55,13 @@ function UI.create(parent, title, titleColor, bgColor, transparency, iconId)
     titleBar.InputChanged:Connect(function(input)
         if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
             local delta = input.Position - dragStart
-            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            frame:TweenPosition(
+                UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y),
+                "Out",
+                "Sine",
+                0.1,
+                true
+            )
         end
     end)
 
