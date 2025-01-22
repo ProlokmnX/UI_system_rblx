@@ -1,20 +1,15 @@
 local Button = {}
 
-function Button.create(parent, text, textColor, bgColor, transparency, iconId, callback)
+function Button.addToUI(frame, text, callback, bgColor, textColor, iconId)
     local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.8, 0, 0.1, 0)
+    button.Position = UDim2.new(0.1, 0, 0.8, 0)
+    button.BackgroundColor3 = bgColor or Color3.fromRGB(70, 70, 70)
     button.Text = text or "Button"
-    button.Font = Enum.Font.GothamBold
-    button.TextSize = 16
+    button.Font = Enum.Font.Gotham
+    button.TextSize = 14
     button.TextColor3 = textColor or Color3.fromRGB(255, 255, 255)
-    button.BackgroundColor3 = bgColor or Color3.fromRGB(50, 50, 50)
-    button.BackgroundTransparency = transparency or 0.1
-    button.Size = UDim2.new(0.9, 0, 0, 50)
-    button.Position = UDim2.new(0.05, 0, 0.2, 0) -- Positioned below the title bar
-    button.Parent = parent
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
-    corner.Parent = button
+    button.Parent = frame
 
     if iconId then
         local icon = Instance.new("ImageLabel")
@@ -24,17 +19,10 @@ function Button.create(parent, text, textColor, bgColor, transparency, iconId, c
         icon.BackgroundTransparency = 1
         icon.Parent = button
 
-        button.TextXAlignment = Enum.TextXAlignment.Left
-        button.Text = "   " .. button.Text -- Offset text for icon
+        button.Text = "   " .. button.Text
     end
 
-    button.MouseButton1Click:Connect(function()
-        if callback then
-            callback()
-        end
-    end)
-
-    return button
+    button.MouseButton1Click:Connect(callback)
 end
 
 return Button
