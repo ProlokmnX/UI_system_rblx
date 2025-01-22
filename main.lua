@@ -1,23 +1,26 @@
--- main.lua
-local MainUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProlokmnX/UI_system_rblx/main/main_ui.lua"))()
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProlokmnX/UI_system_rblx/main/ui.lua"))()
+local Notify = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProlokmnX/UI_system_rblx/main/notify.lua"))()
 
--- Create the base UI
-local mainFrame = MainUI.create(
-    "TestUI",                     -- UI Name
-    0.1,                          -- Transparency
-    Color3.fromRGB(100, 100, 255),-- Background Color
-    UDim2.new(0, 400, 0, 300)     -- Size (Width x Height)
-)
+-- Identity Check
+local identity = syn and syn.get_thread_identity and syn.get_thread_identity() or 7 -- Assuming highest if not accessible
 
--- Add a title
-UI.addTitle(mainFrame, "My Cool UI", 1234567890) -- Title with optional image ID
-
--- Add buttons
-UI.addButton(mainFrame, "Click Me!", function()
-    print("Button clicked!")
-end)
-
-UI.addButton(mainFrame, "Another Button", function()
-    print("Another button clicked!")
-end)
+if identity < 5 then
+    Notify.create(
+        "Identity Check Failed", 
+        "Please use level 5 or higher! Level 8 is recommended.", 
+        5, 
+        Color3.fromRGB(255, 0, 0), 
+        0.1, 
+        nil, 
+        nil
+    )
+else
+    Notify.create(
+        "Identity Check Passed", 
+        "This script should work fine!", 
+        5, 
+        Color3.fromRGB(0, 255, 0), 
+        0.1, 
+        nil, 
+        nil
+    )
+end
