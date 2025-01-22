@@ -18,13 +18,13 @@ function Button.create(parent, text, textColor, bgColor, transparency, iconId, c
     if iconId then
         local icon = Instance.new("ImageLabel")
         icon.Image = "rbxassetid://" .. tostring(iconId)
-        icon.Size = UDim2.new(0, 40, 0, 40)
-        icon.Position = UDim2.new(0, 5, 0.5, -20)
+        icon.Size = UDim2.new(0, 20, 0, 20)
+        icon.Position = UDim2.new(0, 5, 0.5, -10)
         icon.BackgroundTransparency = 1
         icon.Parent = button
 
         button.TextXAlignment = Enum.TextXAlignment.Left
-        button.Text = "   " .. button.Text
+        button.Text = "   " .. button.Text -- Offset text for icon
     end
 
     button.MouseButton1Click:Connect(function()
