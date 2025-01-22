@@ -12,22 +12,20 @@ local mainFrame = MainUI.create(
 )
 
 -- Add title
-UI.addTitle(mainFrame, "Debugging UI", 1234567890)
+UI.addTitle(mainFrame, "Debugging UI", 7229442422) -- Image ID provided
 
 -- Add a close button
 UI.addCloseButton(mainFrame)
 
--- Add a button for notifications
+-- Add buttons for various tests
 UI.addButton(mainFrame, "Test Notification", function()
     Notiy.create("Notification Test", "This is a debug notification!", 3, Color3.fromRGB(85, 255, 85), 0.1)
 end)
 
--- Add a button for printing to the console
-UI.addButton(mainFrame, "Console Test", function()
-    print("Console test successful!")
+UI.addButton(mainFrame, "Print Debug Info", function()
+    print("Debug info: Test button clicked!")
 end)
 
--- Add a button for error simulation
 UI.addButton(mainFrame, "Simulate Error", function()
     error("This is a simulated error for debugging purposes.")
 end)
