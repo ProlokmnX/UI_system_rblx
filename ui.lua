@@ -1,16 +1,16 @@
 local UI = {}
 
-function UI.create(title, titleColor, bgColor, transparency, iconId)
+function UI.create(title, iconId, size, bgColor, transparency)
     local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     local screenGui = Instance.new("ScreenGui")
     screenGui.Parent = playerGui
 
     -- Main Frame
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 400, 0, 300)
-    frame.Position = UDim2.new(0.5, -200, 0.5, -150) -- Center
+    frame.Size = size or UDim2.new(0, 400, 0, 300)
+    frame.Position = UDim2.new(0.5, -size.X.Offset / 2, 0.5, -size.Y.Offset / 2) -- Centered
     frame.BackgroundColor3 = bgColor or Color3.fromRGB(30, 30, 30)
-    frame.BackgroundTransparency = transparency or 0
+    frame.BackgroundTransparency = transparency or 0.1
     frame.AnchorPoint = Vector2.new(0.5, 0.5)
     frame.Parent = screenGui
 
@@ -19,22 +19,28 @@ function UI.create(title, titleColor, bgColor, transparency, iconId)
     corner.Parent = frame
 
     -- Title Bar
-    local titleBar = Instance.new("TextLabel")
+    local titleBar = Instance.new("Frame")
     titleBar.Size = UDim2.new(1, 0, 0.15, 0)
-    titleBar.Position = UDim2.new(0, 0, 0, 0)
-    titleBar.BackgroundColor3 = titleColor or Color3.fromRGB(40, 40, 40)
-    titleBar.Text = title or "UI"
-    titleBar.Font = Enum.Font.GothamBold
-    titleBar.TextSize = 18
-    titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleBar.TextXAlignment = Enum.TextXAlignment.Left
+    titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     titleBar.Parent = frame
 
     local cornerTitle = Instance.new("UICorner")
     cornerTitle.CornerRadius = UDim.new(0, 10)
     cornerTitle.Parent = titleBar
 
-    -- Icon (Optional)
+    -- Title Text
+    local titleText = Instance.new("TextLabel")
+    titleText.Size = UDim2.new(1, -50, 1, 0)
+    titleText.Position = UDim2.new(0, 50, 0, 0)
+    titleText.BackgroundTransparency = 1
+    titleText.Text = title or "UI"
+    titleText.Font = Enum.Font.GothamBold
+    titleText.TextSize = 18
+    titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleText.TextXAlignment = Enum.TextXAlignment.Left
+    titleText.Parent = titleBar
+
+    -- Icon
     if iconId then
         local icon = Instance.new("ImageLabel")
         icon.Image = "rbxassetid://" .. tostring(iconId)
@@ -42,45 +48,24 @@ function UI.create(title, titleColor, bgColor, transparency, iconId)
         icon.Position = UDim2.new(0, 5, 0.5, -20)
         icon.BackgroundTransparency = 1
         icon.Parent = titleBar
-
-        titleBar.Text = "   " .. titleBar.Text -- Offset text for icon
     end
+
+    -- Close Button
+    local closeButton = Instance.new("TextButton")
+    closeButton.Size = UDim2.new(0, 50, 1, 0)
+    closeButton.Position = UDim2.new(1, -50, 0, 0)
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
+    closeButton.Text = "X"
+    closeButton.Font = Enum.Font.GothamBold
+    closeButton.TextSize = 16
+    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.Parent = titleBar
+
+    closeButton.MouseButton1Click:Connect(function()
+        screenGui:Destroy()
+    end)
 
     return frame
-end
-
-function UI.addButton(parent, text, textColor, bgColor, transparency, iconId, callback)
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0.8, 0, 0.15, 0)
-    button.Position = UDim2.new(0.1, 0, 0.85, 0)
-    button.BackgroundColor3 = bgColor or Color3.fromRGB(70, 70, 70)
-    button.BackgroundTransparency = transparency or 0
-    button.Text = text or "Button"
-    button.Font = Enum.Font.Gotham
-    button.TextSize = 14
-    button.TextColor3 = textColor or Color3.fromRGB(255, 255, 255)
-    button.Parent = parent
-
-    local cornerButton = Instance.new("UICorner")
-    cornerButton.CornerRadius = UDim.new(0, 8)
-    cornerButton.Parent = button
-
-    -- Icon (Optional)
-    if iconId then
-        local icon = Instance.new("ImageLabel")
-        icon.Image = "rbxassetid://" .. tostring(iconId)
-        icon.Size = UDim2.new(0, 20, 0, 20)
-        icon.Position = UDim2.new(0, 5, 0.5, -10)
-        icon.BackgroundTransparency = 1
-        icon.Parent = button
-
-        button.Text = "   " .. button.Text -- Offset text for icon
-    end
-
-    -- Connect Callback
-    if callback then
-        button.MouseButton1Click:Connect(callback)
-    end
 end
 
 return UI
