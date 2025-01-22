@@ -5,15 +5,19 @@ function UI.create(title, iconId, size, bgColor, transparency)
     local screenGui = Instance.new("ScreenGui")
     screenGui.Parent = playerGui
 
+    -- Ensure size is provided, or use a default value
+    size = size or UDim2.new(0, 400, 0, 300)
+
     -- Main Frame
     local frame = Instance.new("Frame")
-    frame.Size = size or UDim2.new(0, 400, 0, 300)
+    frame.Size = size
     frame.Position = UDim2.new(0.5, -size.X.Offset / 2, 0.5, -size.Y.Offset / 2) -- Centered
     frame.BackgroundColor3 = bgColor or Color3.fromRGB(30, 30, 30)
     frame.BackgroundTransparency = transparency or 0.1
     frame.AnchorPoint = Vector2.new(0.5, 0.5)
     frame.Parent = screenGui
 
+    -- Add rounded corners
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 10)
     corner.Parent = frame
