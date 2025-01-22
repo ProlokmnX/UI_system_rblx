@@ -8,7 +8,8 @@ function Button.create(parent, text, textColor, bgColor, transparency, iconId, c
     button.TextColor3 = textColor or Color3.fromRGB(255, 255, 255)
     button.BackgroundColor3 = bgColor or Color3.fromRGB(50, 50, 50)
     button.BackgroundTransparency = transparency or 0.1
-    button.Size = UDim2.new(0, 150, 0, 50)
+    button.Size = UDim2.new(0.9, 0, 0, 50)
+    button.Position = UDim2.new(0.05, 0, 0.2, 0) -- Positioned below the title bar
     button.Parent = parent
 
     local corner = Instance.new("UICorner")
