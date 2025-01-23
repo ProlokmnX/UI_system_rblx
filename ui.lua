@@ -1,14 +1,11 @@
 local UI = {}
 
 function UI.create(title, iconId, size, bgColor, transparency)
-    -- Validate the size argument
-    size = size or UDim2.new(0, 400, 0, 300) -- Default size if none is provided
-    -- Validate transparency argument
-    transparency = transparency or 0.1 -- Default transparency if none is provided
+    -- Set default values for size, bgColor, and transparency
+    size = size or UDim2.new(0, 400, 0, 300)
+    bgColor = bgColor or Color3.fromRGB(30, 30, 30)
+    transparency = transparency or 0.1
 
-    -- Validate background color argument
-    bgColor = bgColor or Color3.fromRGB(30, 30, 30) -- Default background color if none is provided
-    
     local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     local screenGui = Instance.new("ScreenGui")
     screenGui.Parent = playerGui
@@ -22,7 +19,6 @@ function UI.create(title, iconId, size, bgColor, transparency)
     frame.AnchorPoint = Vector2.new(0.5, 0.5)
     frame.Parent = screenGui
 
-    -- Add rounded corners
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 10)
     corner.Parent = frame
@@ -37,7 +33,6 @@ function UI.create(title, iconId, size, bgColor, transparency)
     cornerTitle.CornerRadius = UDim.new(0, 10)
     cornerTitle.Parent = titleBar
 
-    -- Title Text
     local titleText = Instance.new("TextLabel")
     titleText.Size = UDim2.new(1, -50, 1, 0)
     titleText.Position = UDim2.new(0, 50, 0, 0)
@@ -49,7 +44,7 @@ function UI.create(title, iconId, size, bgColor, transparency)
     titleText.TextXAlignment = Enum.TextXAlignment.Left
     titleText.Parent = titleBar
 
-    -- Icon
+    -- Icon (optional)
     if iconId then
         local icon = Instance.new("ImageLabel")
         icon.Image = "rbxassetid://" .. tostring(iconId)
@@ -72,6 +67,41 @@ function UI.create(title, iconId, size, bgColor, transparency)
 
     closeButton.MouseButton1Click:Connect(function()
         screenGui:Destroy()
+    end)
+
+    -- Make draggable
+    local isDragging = false
+    local dragInput, dragStart, startPos
+
+    local function update(input)
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+
+    titleBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            isDragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    isDragging = false
+                end
+            end)
+        end
+    end)
+
+    titleBar.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            dragInput = input
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if input == dragInput and isDragging then
+            update(input)
+        end
     end)
 
     return frame
