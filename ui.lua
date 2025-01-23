@@ -65,9 +65,25 @@ function UI.create(title, iconId, size, bgColor, transparency)
     closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     closeButton.Parent = titleBar
 
+    -- Add rounded corners to the close button
+    local closeCorner = Instance.new("UICorner")
+    closeCorner.CornerRadius = UDim.new(0, 8)
+    closeCorner.Parent = closeButton
+
+    -- Add hover effect
+    closeButton.MouseEnter:Connect(function()
+        closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50) -- Brighter red on hover
+    end)
+
+    closeButton.MouseLeave:Connect(function()
+        closeButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85) -- Original color
+    end)
+
+    -- Close the UI when clicked
     closeButton.MouseButton1Click:Connect(function()
         screenGui:Destroy()
     end)
+
 
     -- Make draggable
     local isDragging = false
